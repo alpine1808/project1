@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class tableCreator {
+public class TableCreator {
 	public static void createUsersTable() {
         String sql = """
             CREATE TABLE IF NOT EXISTS ResidentData (
@@ -22,7 +22,7 @@ public class tableCreator {
             );
         """;
 
-        try (Connection conn = MySQLConnection.getConnection();
+        try (Connection conn = MySQLConnection.getResidentConnection();
              Statement stmt = conn.createStatement()) {
 
             stmt.execute(sql);

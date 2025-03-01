@@ -5,7 +5,7 @@ import java.sql.*;
 public class DataUpdater {
 	public static boolean addResident(String name, String email, String blockName, int residentCount, double area) {
 	    String insertQuery = "INSERT INTO ResidentData (name, email, apartment_name, resident_count, apartment_area) VALUES (?, ?, ?, ?, ?)";
-	    try (Connection conn = MySQLConnection.getConnection();
+	    try (Connection conn = MySQLConnection.getResidentConnection();
 	         PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
 
 	        pstmt.setString(1, name);
@@ -16,10 +16,10 @@ public class DataUpdater {
 	        
 	        int rowsInserted = pstmt.executeUpdate();
 	        if (rowsInserted > 0) {
-	            System.out.println("✅ Thêm thành công.");
+	            System.out.println("Thêm thành công.");
 	            return true;
 	        } else {
-	            System.out.println("❌ Thêm thất bại.");
+	            System.out.println("Thêm thất bại.");
 	        }
 	    } catch (SQLIntegrityConstraintViolationException e) {
 	        System.out.println("Lỗi: Email hoặc tên căn hộ đã tồn tại.");
@@ -32,14 +32,14 @@ public class DataUpdater {
 	public static void updateEmailByBlockName(String newEmail, String blockName) {
         String sql = "UPDATE ResidentData SET email = ? WHERE apartment_name = ?";
 
-        try (Connection conn = MySQLConnection.getConnection();
+        try (Connection conn = MySQLConnection.getResidentConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, newEmail);
             pstmt.setString(2, blockName);
 
             int rows = pstmt.executeUpdate();
-            System.out.println(rows > 0 ? "🔄 Đã cập nhật " + rows + " dòng." : "Không tìm thấy người dùng.");
+            System.out.println(rows > 0 ? "Đã cập nhật " + rows + " dòng." : "Không tìm thấy người dùng.");
 
         } catch (SQLException e) {
             System.out.println("Lỗi khi cập nhật: " + e.getMessage());
@@ -50,7 +50,7 @@ public class DataUpdater {
 	    String checkSql = "SELECT COUNT(*) FROM ResidentData WHERE apartment_name = ?";
 	    String deleteSql = "DELETE FROM ResidentData WHERE apartment_name = ?";
 
-	    try (Connection conn = MySQLConnection.getConnection();
+	    try (Connection conn = MySQLConnection.getResidentConnection();
 	         PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
 
 	        //Gán giá trị cho dấu ? trong câu lệnh kiểm tra
