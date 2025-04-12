@@ -1,20 +1,23 @@
-# Dùng OpenJDK 17 (Render hỗ trợ tốt)
+# Sử dụng OpenJDK 17 làm base image
 FROM openjdk:17
 
-# Cài đặt Maven (nếu cần)
+# Cài đặt Maven (nếu chưa có sẵn trong base image)
 RUN apt-get update && apt-get install -y maven
 
-# Sao chép mã nguồn vào container
+# Sao chép toàn bộ mã nguồn vào thư mục làm việc /app trong container
 COPY . /app
 
-# Đặt thư mục làm việc
+# Chuyển đến thư mục làm việc /app
 WORKDIR /app
 
-# Build ứng dụng (mvn clean package sẽ tạo ra file JAR trong thư mục target)
+# Chạy lệnh build Maven để tạo file JAR
 RUN mvn clean package -DskipTests
 
-# Sao chép file JAR vào container
+# Kiểm tra thư mục target đã có file JAR chưa
+RUN ls -al target
+
+# Sao chép file JAR từ thư mục target vào container
 COPY target/your-app-name.jar app.jar
 
-# Lệnh chạy ứng dụng Spring Boot
+# Lệnh để chạy ứng dụng Spring Boot
 ENTRYPOINT ["java", "-jar", "/app.jar"]
