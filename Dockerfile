@@ -17,7 +17,7 @@ RUN mvn clean package -DskipTests
 RUN ls -al target
 
 # Sao chép file JAR từ thư mục target vào container
-COPY target/your-app-name.jar app.jar
+COPY target/spring-security-form-login-0.0.1-SNAPSHOT.jar app.jar
 
 # Lệnh để chạy ứng dụng Spring Boot
 ENTRYPOINT ["java", "-jar", "/app.jar"]
