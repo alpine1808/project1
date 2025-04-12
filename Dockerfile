@@ -1,20 +1,11 @@
-# Sử dụng base image Maven đã bao gồm OpenJDK 17 và Maven
-FROM maven:3.8.6-openjdk-17
+# Dùng OpenJDK 17 (Render hỗ trợ tốt)
+FROM openjdk:17
 
-# Sao chép toàn bộ mã nguồn vào thư mục làm việc /app trong container
-COPY . /app
+# Đặt biến ARG để chỉ định file jar sau khi build
+ARG JAR_FILE=target/*.jar
 
-# Chuyển đến thư mục làm việc /app
-WORKDIR /app
+# Copy file jar vào container
+COPY ${JAR_FILE} app.jar
 
-# Chạy lệnh build Maven để tạo file JAR
-RUN mvn clean package -DskipTests
-
-# Kiểm tra thư mục target đã có file JAR chưa
-RUN ls -al target
-
-# Sao chép file JAR từ thư mục target vào container
-COPY target/spring-security-form-login-0.0.1-SNAPSHOT.jar app.jar
-
-# Lệnh để chạy ứng dụng Spring Boot
+# Lệnh chạy ứng dụng Spring Boot
 ENTRYPOINT ["java", "-jar", "/app.jar"]
