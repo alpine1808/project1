@@ -1,8 +1,5 @@
-# Sử dụng OpenJDK 17 làm base image
-FROM openjdk:17
-
-# Cài đặt Maven (nếu chưa có sẵn trong base image)
-RUN apt-get update && apt-get install -y maven
+# Sử dụng base image Maven đã bao gồm OpenJDK 17 và Maven
+FROM maven:3.8.6-openjdk-17
 
 # Sao chép toàn bộ mã nguồn vào thư mục làm việc /app trong container
 COPY . /app
